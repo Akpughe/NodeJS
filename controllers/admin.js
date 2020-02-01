@@ -23,7 +23,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: req.user._id // giving access to the user _id
+    userId: req.user // giving access to the user ._id
   });
   product
     .save()
@@ -105,7 +105,9 @@ exports.getProducts = (req, res, next) => {
   //   });
   // });
   Product.find()
+    // .populate('userId')
     .then(products => {
+      console.log(products)
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',
