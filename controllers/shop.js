@@ -34,7 +34,6 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  console.log(req.user.cart);
   req.user
     .populate('cart.items.productId')
     .execPopulate()
@@ -42,7 +41,7 @@ exports.getCart = (req, res, next) => {
       const products = user.cart.items;
       res.render('shop/cart', {
         path: '/cart',
-        pageTitle: 'My Cart',
+        pageTitle: 'Your Cart',
         products: products,
         isAuthenticated: req.session.isLoggedIn
       });
@@ -90,7 +89,7 @@ exports.postOrder = (req, res, next) => {
       });
       const order = new Order({
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user
         },
         products: products
@@ -126,10 +125,8 @@ exports.getIndex = (req, res, next) => {
         prods: product,
         pageTitle: 'Home Page',
         path: '/',
-        isAuthenticated: req.session.isLoggedIn
-        // hasProducts: products.length > 0,
-        // activeShop: true,
-        // productCSS: true
+        // isAuthenticated: req.session.isLoggedIn, 
+        // csrfToken: req.csrfToken()
       });
     })
     .catch(err => console.log(err));
