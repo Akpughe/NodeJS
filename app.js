@@ -81,6 +81,12 @@ app.get('/500', errorController.errorPage500)
 
 app.use('', errorController.errorPage);
 
+//error handling middleware
+app.use((error, req, res, next) => {
+  res.redirect('/500')
+})
+//--------------//
+
 // mongoConnect(() => {
 //   app.listen(4000);
 // });
@@ -88,6 +94,7 @@ app.use('', errorController.errorPage);
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
+    console.log("listening on port 4000")
     app.listen(4000);
   })
   .catch(err => {
