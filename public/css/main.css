@@ -225,19 +225,38 @@ form {
   color: white;
 }
 
-.user-message{
+.user-message {
   margin: auto;
   width: 90%;
   border: 1px solid #4771fa;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 3px;
-  background:#ffb9b9 ;
+  background: #ffb9b9;
   text-align: center;
 }
 
-.user-message--error{
-   border-color: red;
-   background-color:rgb(255, 176, 176) ;
+.user-message--error {
+  border-color: red;
+  background-color: rgb(255, 176, 176);
+}
+
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pagination a {
+  text-decoration: none;
+  color: #00695c;
+  padding: 0.5rem;
+  border: 1px solid #00695c;
+  margin: 0 1rem;
+}
+
+.pagination a:hover,
+.pagination a:active {
+  background: #00695c;
+  color: white;
 }
 
 @media (min-width: 768px) {
@@ -249,7 +268,7 @@ form {
     display: none;
   }
 
-  .user-message{
+  .user-message {
     width: 30rem;
   }
 }
