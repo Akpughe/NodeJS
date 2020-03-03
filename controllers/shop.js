@@ -9,18 +9,30 @@ const Order = require('../models/order');
 const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
-  Product.find() // fetch all products
-    .then(products => {
-      console.log(products);
+  const page = +req.query.page || 1;
+  let totalItems;
 
+  Product.find()
+    .countDocuments()
+    .then(numProducts => {
+      totalItems = numProducts;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
+    .then(product => {
       res.render('shop/product-list', {
-        prods: products,
-        pageTitle: 'All Products',
+        prods: product,
+        pageTitle: 'Products',
         path: '/products',
-        isAuthenticated: req.session.isLoggedIn
-        // hasProducts: products.length > 0,
-        // activeShop: true,
-        // productCSS: true
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
+        // isAuthenticated: req.session.isLoggedIn,
+        // csrfToken: req.csrfToken()
       });
     })
     .catch(err => console.log(err));
@@ -126,14 +138,14 @@ exports.getOrder = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  const page = req.query.page;
+  const page = +req.query.page || 1;
   let totalItems;
 
   Product.find()
     .countDocuments()
     .then(numProducts => {
       totalItems = numProducts;
-     return Product.find()
+      return Product.find()
         .skip((page - 1) * ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE);
     })
@@ -142,12 +154,12 @@ exports.getIndex = (req, res, next) => {
         prods: product,
         pageTitle: 'Home Page',
         path: '/',
-        totalProducts: totalItems,
+        currentPage: page,
         hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-        hasPrevious: page > 1,
+        hasPreviousPage: page > 1,
         nextPage: page + 1,
         previousPage: page - 1,
-        lastPage: Math.ceil(totalItems/ ITEMS_PER_PAGE)
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
         // isAuthenticated: req.session.isLoggedIn,
         // csrfToken: req.csrfToken()
       });
